@@ -4,7 +4,7 @@
       "command": "npx",
       "args": [
         "-y",
-        "@playwright/mcp@latest",
+        "@playwright/mcp@0.0.85",
         "--allow-unrestricted-file-access",
         "--output-dir",
         "${CLAUDE_PLUGIN_DATA}/playwright-output"

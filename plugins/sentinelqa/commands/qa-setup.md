@@ -1,8 +1,8 @@
 ---
-description: ONE-TIME machine setup for SentinelQA — checks every prerequisite, collects all your projects in one go, and saves them so /qa-functional works in every project without asking again. Re-run any time to add or change a project.
+description: ONE-TIME machine setup for Agentic QA Autopilot — checks every prerequisite, collects all your projects in one go, and saves them so /qa-functional works in every project without asking again. Re-run any time to add or change a project.
 ---
 
-Set SentinelQA up on **this machine, for all of this person's projects, once**. After this, typing
+Set Agentic QA Autopilot up on **this machine, for all of this person's projects, once**. After this, typing
 `/qa-functional <TICKET-KEY>` in any of their projects must work without per-project setup and
 without asking again for anything recorded here.
 
@@ -30,7 +30,7 @@ directory instead. If `python` does not work, try `py -3`, then `python3`, and u
 ## Step 1 — Check the machine (silently)
 
 1. Run `SETUP doctor`. It checks Python, Git, Git Bash (Windows), Node.js and npx (needed for the
-   browser SentinelQA installs), the Claude Code version, any saved profile and permission decision,
+   browser Agentic QA Autopilot installs), the Claude Code version, any saved profile and permission decision,
    the optional Jira attachment credentials, and the report-shelf folder.
 2. Check inside this session yourself:
    - **Jira:** is any tool ending in `getJiraIssue` available? Which connector (Atlassian Rovo /
@@ -46,17 +46,17 @@ directory instead. If `python` does not work, try `py -3`, then `python3`, and u
 ## Step 2 — One message: what's missing, and everything about their projects
 
 Start with a short **readiness table**: each prerequisite as ✅ / ❌ / ⚠️ with the exact fix for anything
-not ✅. For each ❌, ask: *"Will you fix this now? (yes / no — SentinelQA works without it, but <what is
+not ✅. For each ❌, ask: *"Will you fix this now? (yes / no — Agentic QA Autopilot works without it, but <what is
 lost>)"*.
 
 Then ask, numbered, skipping anything already known from the profile or from `$ARGUMENTS`:
 
 **About you (once)**
 1. Your name, as it should appear as reviewer at the QA gates.
-2. **Permission rules:** add SentinelQA's permission rules to your user settings, so QA runs stop
+2. **Permission rules:** add Agentic QA Autopilot's permission rules to your user settings, so QA runs stop
    asking before each step, in every project? (yes / no). Skip this if the session is in *auto* mode.
 3. Optional: will you set `JIRA_EMAIL` + `JIRA_API_TOKEN` (Jira Cloud) or `JIRA_PAT` (Server/Data
-   Center) so SentinelQA can read ticket attachments? (Never paste the token here.)
+   Center) so Agentic QA Autopilot can read ticket attachments? (Never paste the token here.)
 
 **About each project you test** (repeat the block per project; "same as previous" is fine):
 4. Project name, and its **ticket key prefix(es)** (e.g. `ABC` for `ABC-123`).
@@ -69,7 +69,7 @@ Then ask, numbered, skipping anything already known from the profile or from `$A
    and reports live instead? (default: `~/.sentinelqa/cases/<Project>`)
 9. **Test environments:** name → URL → which build it normally runs → how to confirm the deployed build
    by server behaviour (a version endpoint, a feature only the new build has). Mark any **production**
-   URL as production: SentinelQA never tests it.
+   URL as production: Agentic QA Autopilot never tests it.
 10. **Test accounts by role:** role → **where its login is kept**, never the login itself. Two forms
     can be checked and used without asking again:
     - `file:<path>#<key>`: a credentials file **outside any repo** that the person keeps, e.g.
@@ -116,7 +116,7 @@ be found, without printing any credential). For each Jira prefix, confirm with t
 project is visible on its site (`searchJiraIssuesUsingJql` with `project = <PREFIX>`, 1 result).
 Show anything that failed, with its fix, in one list. Then tell the person, briefly:
 - what was saved, where (`~/.sentinelqa/projects.json`), and that it holds no secrets;
-- anything still missing, with its fix, and what SentinelQA does without it;
+- anything still missing, with its fix, and what Agentic QA Autopilot does without it;
 - **restart Claude Code** if permission rules were added;
 - **how to use it:** open Claude Code in the project's folder and type `/qa-functional <TICKET-KEY>`.
   Each run first checks the folder, the environment and the logins, asks once for anything missing,

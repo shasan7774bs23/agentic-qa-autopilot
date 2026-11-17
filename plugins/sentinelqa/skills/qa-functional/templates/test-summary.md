@@ -83,6 +83,10 @@ If there were none, say so explicitly.>
 
 **Totals:** Pass <n> · Fail <n> · Blocked <n> · Not Executed <n>
 
+**Per-case sections** (one per executed case) use a heading that is ONE plain, complete sentence — what was tested and what happened:
+`### TC-03 · Applying coupon SAVE10 to a $100.00 order reduces the total to $90.00 — PASS`
+Never a bare label ("TC-03 · Coupon SAVE10") and never question/answer or arrow form. The Scenario column above follows the same rule in short form. (`report-audit.py` rule R9g.) Every screenshot is a FULL one: viewport at least 1440 px wide, full-page for grids/lists/forms, the whole element for popups.
+
 <Blocked and Not Executed each need a reason. Never let them pass without one.>
 
 ### Exploratory sessions
@@ -144,7 +148,7 @@ above cannot be READY.>
 ### How every executed case is written (passes included)
 
 ```markdown
-#### TC-01 · Apply SAVE10 to a $100.00 order
+#### TC-01 · Applying coupon SAVE10 to a $100.00 order reduces the amount to pay to $90.00 — PASS
 
 **Steps to reproduce**:
 

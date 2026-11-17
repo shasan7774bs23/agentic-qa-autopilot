@@ -1,6 +1,6 @@
 """sentinelqa-setup.py — one-time machine setup and the per-machine project profile.
 
-SentinelQA is set up ONCE per machine, for ALL of a person's projects. This script does the
+Agentic QA Autopilot is set up ONCE per machine, for ALL of a person's projects. This script does the
 mechanical part so it is identical on every machine; the /qa-setup command holds the conversation.
 
 Subcommands
@@ -9,7 +9,7 @@ Subcommands
     match [--cwd PATH] [--ticket K]  which saved project applies here (JSON); used by every QA run
     import --json '<json>'           merge a profile or one project into the saved profile
                                      (also: import <file>, or import - to read stdin)
-    add-rules [--settings PATH]      merge SentinelQA's permission rules into the user's Claude settings
+    add-rules [--settings PATH]      merge Agentic QA Autopilot's permission rules into the user's Claude settings
     state rules added|declined       record the permission-rules answer for this machine
     state show
 
@@ -144,7 +144,7 @@ def doctor(as_json):
             "" if bash else "Install Git for Windows; Claude Code runs commands through Git Bash")
     n = run(["node", "--version"])
     nv = version_tuple(n)
-    add("OK" if nv and nv >= (18, 0, 0) else "MISSING", "Node.js 18+ (for SentinelQA's browser)", n or "not found",
+    add("OK" if nv and nv >= (18, 0, 0) else "MISSING", "Node.js 18+ (for Agentic QA Autopilot's browser)", n or "not found",
         "" if nv and nv >= (18, 0, 0) else "Install Node.js LTS from nodejs.org, then restart Claude Code")
     x = run(["npx", "--version"])
     add("OK" if x else "MISSING", "npx", x or "not found", "" if x else "Comes with Node.js; reinstall Node.js LTS")
@@ -168,7 +168,7 @@ def doctor(as_json):
     has_pat = bool(os.environ.get("JIRA_PAT"))
     add("OK" if (has_cloud or has_pat) else "WARN", "Jira attachment download (optional)",
         "credentials set in environment" if (has_cloud or has_pat) else "no JIRA_EMAIL+JIRA_API_TOKEN or JIRA_PAT",
-        "" if (has_cloud or has_pat) else "Optional: set them to let SentinelQA read ticket attachments")
+        "" if (has_cloud or has_pat) else "Optional: set them to let Agentic QA Autopilot read ticket attachments")
     shelf = os.environ.get("SENTINELQA_DOWNLOADS_DIR") or os.path.join(os.path.expanduser("~"), "Downloads")
     ok = os.path.isdir(shelf) and os.access(shelf, os.W_OK)
     add("OK" if ok else "WARN", "Report shelf folder", shelf, "" if ok else "Create it, or set SENTINELQA_DOWNLOADS_DIR")
@@ -178,12 +178,12 @@ def doctor(as_json):
         "Claude settings -> Connectors -> Atlassian Rovo. The older 'Atlassian' connector is being retired")
     add("CHECK-IN-CLAUDE", "Browser tool", "tools named mcp__plugin_sentinelqa_playwright__browser_*",
         "Needs Node.js; check /mcp in Claude Code")
-    add("CHECK-IN-CLAUDE", "Model", "Opus available (`/model opus`)", "Both SentinelQA agents are pinned to Opus")
+    add("CHECK-IN-CLAUDE", "Model", "Opus available (`/model opus`)", "Both Agentic QA Autopilot agents are pinned to Opus")
 
     if as_json:
         print(json.dumps({"checks": checks}, indent=2))
     else:
-        print("SentinelQA doctor")
+        print("Agentic QA Autopilot doctor")
         print("-" * 78)
         for ch in checks:
             print("%-16s %-38s %s" % (ch["status"], ch["check"], ch["detail"]))
@@ -486,7 +486,7 @@ def preflight(cwd, ticket, project, roles, env, do_probe):
     prof = read_json(PROFILE, None)
     if not prof or not prof.get("projects"):
         print(json.dumps({"status": "no_profile", "situation": "E", "ask": [
-            "SentinelQA isn't set up on this machine yet: run /qa-setup now (once, all projects), or continue "
+            "Agentic QA Autopilot isn't set up on this machine yet: run /qa-setup now (once, all projects), or continue "
             "and answer only what this ticket needs"]}, indent=2))
         return 0
     here = norm(cwd or os.getcwd())
@@ -570,7 +570,7 @@ def preflight(cwd, ticket, project, roles, env, do_probe):
 def settings_path(arg):
     if arg:
         return arg
-    if os.environ.get("SENTINELQA_SETTINGS_FILE"):      # used by SentinelQA's own tests
+    if os.environ.get("SENTINELQA_SETTINGS_FILE"):      # used by Agentic QA Autopilot's own tests
         return os.environ["SENTINELQA_SETTINGS_FILE"]
     if os.environ.get("CLAUDE_CONFIG_DIR"):
         return os.path.join(os.environ["CLAUDE_CONFIG_DIR"], "settings.json")
@@ -645,7 +645,7 @@ def add_rules(arg):
     want = list(dict.fromkeys(base_rules() + extra_rules()))     # de-duplicated, order kept
     new = [r for r in want if r not in allow]
     if not new:
-        print("already present: all %d SentinelQA rules are in %s" % (len(want), path))
+        print("already present: all %d Agentic QA Autopilot rules are in %s" % (len(want), path))
         set_state("added")
         return 0
     b = backup(path)
@@ -658,7 +658,7 @@ def add_rules(arg):
 
 
 def main():
-    ap = argparse.ArgumentParser(description="SentinelQA one-time setup and project profile")
+    ap = argparse.ArgumentParser(description="Agentic QA Autopilot one-time setup and project profile")
     sp = ap.add_subparsers(dest="cmd", required=True)
     d = sp.add_parser("doctor"); d.add_argument("--json", action="store_true")
     sp.add_parser("show")

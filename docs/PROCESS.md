@@ -1,6 +1,6 @@
-# The SentinelQA process — a walkthrough
+# The Agentic QA Autopilot process — a walkthrough
 
-This guide explains **what happens when you QA a ticket with SentinelQA, and why each rule exists.**
+This guide explains **what happens when you QA a ticket with Agentic QA Autopilot, and why each rule exists.**
 It is written for someone new to the process. The agents follow the full rulebook in
 `plugins/sentinelqa/skills/qa-functional/SKILL.md`; this page is the human-readable version.
 
@@ -10,7 +10,7 @@ It is written for someone new to the process. The agents follow the full ruleboo
 
 Most QA failures are not a lack of effort. They come from **skipped steps that nobody notices**:
 a plan nobody approved, a "bug" that was only a guess from reading code, a report that says
-"tested thoroughly" with no evidence behind it. SentinelQA fixes this with three things:
+"tested thoroughly" with no evidence behind it. Agentic QA Autopilot fixes this with three things:
 
 1. **Stations** — every ticket goes through the same six steps, in order.
 2. **Gates** — at five points the agent **stops and a human decides**. The agent never decides
@@ -307,7 +307,7 @@ Anything the agent hands you to decide follows the **decision brief** format
 It ends with a **"Your decisions"** checklist, so you can read it once and decide.
 
 **`/qa-functional` versus the `qa-functional` agent.** `/qa-functional <KEY>` is the full run, live
-testing included: it works in your own session, with the browser SentinelQA installs, and stops at
+testing included: it works in your own session, with the browser Agentic QA Autopilot installs, and stops at
 each gate for you. The `qa-functional` agent is a background helper for the analysis and test-plan
 half. An agent can't wait for a person at a gate, so it stops at the first gate. Its last line always
 tells you the next step: `/qa-functional <KEY>`, which continues from the same case file and runs

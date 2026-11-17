@@ -1,7 +1,7 @@
-# SentinelQA permission rules — set once per machine, apply to every project
+# Agentic QA Autopilot permission rules — set once per machine, apply to every project
 
 Without these, Claude Code (in its default permission mode) asks before nearly every step of a QA
-run: reading SentinelQA's own templates, saving each case-file file, running each audit script, each
+run: reading Agentic QA Autopilot's own templates, saving each case-file file, running each audit script, each
 browser action. These rules allow only what a QA run needs. Everything else still asks: every Jira
 write, `git commit` / `git push`, the browser's `browser_run_code_unsafe`, and any other command.
 

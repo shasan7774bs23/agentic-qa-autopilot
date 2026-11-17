@@ -182,6 +182,16 @@ Result states: **PASS** (actual matches expected) · **FAIL** (does not) · **BL
 **INCONCLUSIVE** (evidence insufficient). If you didn't run it, say NOT EXECUTED — never
 claim a test passed/failed/ran without execution evidence.
 
+**⛔ Standard for every run report (mandatory):**
+- **A FULL screenshot for every executed test case** — pass and fail alike. Viewport at least
+  1440 px wide before capturing (the browser tool's small default viewport crops everything; in
+  test code use a viewport of 1440 px or wider for failure/evidence screenshots); full-page for
+  grids/lists/forms; whole element for popups with scroll areas expanded. A cropped image is not
+  evidence.
+- **Every test-case heading in a report is ONE plain, complete sentence** of what was tested and
+  what happened, e.g. `TC-03 · Applying coupon SAVE10 to a $100.00 order reduces the total to $90.00 — PASS`.
+  Never a bare label, question/answer or arrow form.
+
 ## A failed test is NOT automatically a bug
 Investigate before calling anything a defect: is the automation correct? the test data? the
 environment healthy? is it reproducible? does the application actually violate the

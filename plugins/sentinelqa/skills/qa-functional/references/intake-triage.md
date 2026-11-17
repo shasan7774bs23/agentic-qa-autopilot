@@ -127,5 +127,5 @@ evidence. Lowering autonomy again is normal, not a failure.
 
 ## Output
 
-Write `qa/<TICKET>/00-intake.md` using `templates/intake.md`, then continue to S1.
+Write `qa/<TICKET>/00-intake.yml` using `templates/intake.yml`, then continue to S1.
 

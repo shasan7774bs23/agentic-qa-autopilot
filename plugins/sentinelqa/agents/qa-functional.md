@@ -112,6 +112,17 @@ evidence** — delete it, never relabel it. If a screenshot is genuinely impossi
 case** — "HTTP-level only", "element not rendered", "blocked by X". *"I tested it by API instead"*
 is not a reason. `report-audit.py` fails the report otherwise.
 
+**The screenshot must be FULL.** Set the viewport to at least 1440 px wide before the first capture
+(the browser tool's small default viewport crops everything); full-page for grids/lists/forms;
+whole-element capture for popups with their scroll areas expanded. A cropped image is not evidence —
+retake it. Check dimensions and open key images before building the report.
+
+### 9e. ⛔ Every test-case heading is ONE plain, complete sentence
+It says what was tested and what happened, e.g.
+`TC-03 · Applying coupon SAVE10 to a $100.00 order reduces the total to $90.00 — PASS`.
+Never a bare label (`TC-03 · Coupon SAVE10`), never question/answer or arrow form. Results-table
+scenario cells and brief item titles follow the same rule. `report-audit.py` R9g enforces it.
+
 ### 10. ⛔ An up-front answer is SCOPE, never a gate approval
 
 Answers the human gives at the START of a run — how deep to test, which accounts, whether to fan

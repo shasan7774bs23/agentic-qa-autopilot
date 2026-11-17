@@ -7,7 +7,7 @@ run instructions spelled out.)*
 
 Load the **`sentinelqa:qa-functional`** skill (Skill tool, exactly that name) and run the method for
 the ticket below, working inside its case file: `<case_root>/<TICKET-KEY>/` from this machine's
-SentinelQA profile (default `qa/<TICKET-KEY>/` in the current folder).
+Agentic QA Autopilot profile (default `qa/<TICKET-KEY>/` in the current folder).
 
 Ticket: $ARGUMENTS
 

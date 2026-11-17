@@ -1,4 +1,4 @@
-# SentinelQA
+# Agentic QA Autopilot
 
 **No proof, no pass.** A gated, evidence-first QA process for Claude Code, packaged as one plugin: every
 ticket runs through the same stations and gates, and every claim in a report is backed by
@@ -57,7 +57,7 @@ All five gates fire on **every** ticket. The tier changes how much gets *tested*
 
 | You want to… | Use |
 |---|---|
-| Set SentinelQA up on a new machine (once, all projects) | **`/qa-setup`** |
+| Set Agentic QA Autopilot up on a new machine (once, all projects) | **`/qa-setup`** |
 | **QA one ticket end to end, including live testing** (the normal way) | **`/qa-functional <TICKET-KEY>`** |
 | Get the analysis and test plan prepared in the background first | "use the qa-functional subagent for <TICKET-KEY>", then `/qa-functional <TICKET-KEY>` to test. It continues from the agent's case file |
 | Ask whether something you saw is really a bug, or review a test suite | Just ask. The `qa-functional` skill loads by itself |
@@ -74,9 +74,9 @@ All five gates fire on **every** ticket. The tier changes how much gets *tested*
 | 2 | **Opus** available on your plan | Both agents are pinned to Opus; verdicts need it | `/model opus` | Ask your admin for a plan with Opus |
 | 3 | **Python 3.10+** on `PATH` | The audit, report and setup scripts | `python --version` | python.org, tick **"Add python.exe to PATH"**. On Windows, if `python` opens the Microsoft Store, turn off the alias under *Settings → Apps → Advanced app settings → App execution aliases* |
 | 4 | **Git** (on Windows, **Git for Windows**, which includes Git Bash) | Downloads the plugin; Claude Code runs commands through Git Bash | `git --version` | git-scm.com |
-| 5 | **Node.js 18+** (LTS) | Runs the browser SentinelQA installs for live testing | `node --version` | nodejs.org, then restart Claude Code |
+| 5 | **Node.js 18+** (LTS) | Runs the browser Agentic QA Autopilot installs for live testing | `node --version` | nodejs.org, then restart Claude Code |
 | 6 | **Jira connector: "Atlassian Rovo"** | Reads tickets, comments and linked tickets (read-only) | Claude settings → Connectors | Connect **Atlassian Rovo**. The older "Atlassian" connector is being shut down by Atlassian (*"deprecated HTTP+SSE transport"*) and can't read tickets. Without any connector, paste the ticket text |
-| 7 | *Optional:* Jira API credentials as environment variables | Lets SentinelQA read ticket **attachments** (DB scripts, specs) | — | Jira Cloud: `JIRA_EMAIL` + `JIRA_API_TOKEN` (create at *id.atlassian.com → Security → API tokens*). Server/Data Center: `JIRA_PAT`. Never paste a token into the chat |
+| 7 | *Optional:* Jira API credentials as environment variables | Lets Agentic QA Autopilot read ticket **attachments** (DB scripts, specs) | — | Jira Cloud: `JIRA_EMAIL` + `JIRA_API_TOKEN` (create at *id.atlassian.com → Security → API tokens*). Server/Data Center: `JIRA_PAT`. Never paste a token into the chat |
 
 No GitHub account or invitation is needed: the repo is public.
 
@@ -92,8 +92,11 @@ from `python` to `python3`), but have not been tested yet; please report anythin
 /plugin install sentinelqa@sentinelqa
 ```
 
+The plugin's install name is still `sentinelqa`, its earlier name. That is why the commands above,
+the `~/.sentinelqa/` settings folder and the `SENTINELQA_...` variables keep that spelling.
+
 **2. Restart Claude Code.** Check: `/qa-functional` appears when you type `/qa`, `/agents` lists
-`qa-functional` and `lead-test-automation-engineer`, and `/mcp` lists SentinelQA's `playwright` server.
+`qa-functional` and `lead-test-automation-engineer`, and `/mcp` lists Agentic QA Autopilot's `playwright` server.
 
 **3. Run `/qa-setup` once.** It takes about 5 minutes and covers **all** your projects:
 - checks every prerequisite above and tells you the fix for anything missing;
@@ -101,7 +104,7 @@ from `python` to `python3`), but have not been tested yet; please report anythin
   QA can see the source code, whether QA files may be written in the repo (if not, where they go
   instead), test environments and how to confirm the deployed build, and test accounts **by role**
   (where each login is kept, never the login itself; see *Test logins* below);
-- offers to add SentinelQA's permission rules to your user settings, so QA runs stop asking before
+- offers to add Agentic QA Autopilot's permission rules to your user settings, so QA runs stop asking before
   every step;
 - saves it all to `~/.sentinelqa/projects.json` (no secrets; it refuses anything that looks like one).
 
@@ -111,16 +114,16 @@ a project.
 
 ## Settings for identical behaviour
 
-SentinelQA behaves the same on every machine only if these match. Set them once:
+Agentic QA Autopilot behaves the same on every machine only if these match. Set them once:
 
 | Setting | Use | Why |
 |---|---|---|
 | **Model** | Both agents are pinned to **Opus**. Run your main session on Opus too: `/model opus` | Defect calls and verdicts need the strongest model; a weaker one changes results |
 | **Effort** | `/effort` → **xhigh** (or `"effortLevel": "xhigh"` in `~/.claude/settings.json`) | Deeper reasoning on gates, reconciliation and reports |
 | **Claude Code version** | Keep it updated (`claude update`). Tested on 2.1.318 | The skill relies on recent plugin features |
-| **Git-write guard** | Turn it on (see *Optional: git-write guard* below) | Claude asks before every commit/push, matching the lead's setup |
+| **Git-write guard** | Turn it on (see *Optional: git-write guard* below) | Claude asks before every commit/push, so nothing is committed or pushed without your say |
 | **Permission rules** | Say **yes** when `/qa-setup` offers them (once per machine, all projects). Not needed in *auto* permission mode | In the default permission mode, Claude otherwise asks before nearly every step: reading the plugin's own templates, saving each case-file file, running each audit. In a test, the rules cut those prompts from 6 to 0 |
-| **Project profile** | Run `/qa-setup` once; accept its offer at the end of a run to save anything new | Every ticket in that project then asks only what's new, exactly as on the lead's machine |
+| **Project profile** | Run `/qa-setup` once; accept its offer at the end of a run to save anything new | Every ticket in that project then asks only what's new |
 
 ## Update
 
@@ -128,7 +131,7 @@ SentinelQA behaves the same on every machine only if these match. Set them once:
 /plugin marketplace update sentinelqa
 ```
 
-Then restart Claude Code. Each update is announced with a short note on what changed.
+Then restart Claude Code. What changed in each version is in the repo's commit history on GitHub.
 
 ## Uninstall
 
@@ -139,9 +142,9 @@ Then restart Claude Code. Each update is announced with a short note on what cha
 Nothing outside the plugin is touched, except the reports you published to
 `~/Downloads/QA-Reports/` (those are yours to keep).
 
-## Test logins: where SentinelQA finds them
+## Test logins: where Agentic QA Autopilot finds them
 
-SentinelQA never stores a password. `/qa-setup` records, per role, **where** the login is kept. Two
+Agentic QA Autopilot never stores a password. `/qa-setup` records, per role, **where** the login is kept. Two
 forms are checked before every run and then used without asking:
 
 | Form | Example | Notes |
@@ -149,14 +152,14 @@ forms are checked before every run and then used without asking:
 | A credentials file you keep **outside any repo** (recommended) | `file:C:/Users/me/qa-secrets/test-accounts.json#admin` | JSON (`{"admin": {"user": "...", "password": "..."}}`), `.env` (`ADMIN_PASS=...`) or text. You can fix it mid-session; no restart |
 | Environment variables | `env:QA_ADMIN_USER,QA_ADMIN_PASS` | Claude Code only sees variables that existed when it started: restart after setting them |
 
-A password-manager entry can be recorded too, but then SentinelQA asks for the login at each run. A
+A password-manager entry can be recorded too, but then Agentic QA Autopilot asks for the login at each run. A
 login is only ever typed into the **test application's** login form. It is never written into a case
-file, report or screenshot, and SentinelQA never logs you in or out of Claude, Jira or Git.
+file, report or screenshot, and Agentic QA Autopilot never logs you in or out of Claude, Jira or Git.
 
 ## First run, start to finish
 
 1. Open Claude Code **in the project folder** you are testing (one you saved in `/qa-setup`). If you
-   start it somewhere else, SentinelQA tells you which folder the ticket's project is in, so you can
+   start it somewhere else, Agentic QA Autopilot tells you which folder the ticket's project is in, so you can
    reopen there (or continue without the source code).
 2. Run **`/qa-functional ABC-123`** (use your real ticket key).
 3. Claude reads your saved project details, reads the ticket, checks what this session has (Jira,
@@ -183,8 +186,9 @@ file, report or screenshot, and SentinelQA never logs you in or out of Claude, J
 folder, set the `SENTINELQA_DOWNLOADS_DIR` environment variable.
 
 **Project names on the shelf.** By default, `ABC-123-QA-Report.html` is filed under a project
-folder named `ABC`. To give a ticket prefix a friendlier name, create
-`~/.sentinelqa/projects.json`:
+folder named `ABC`. `/qa-setup` saves a friendlier name for each project you tell it about. To add
+one by hand, add a `ticket_prefixes` entry to `~/.sentinelqa/projects.json` (edit the file; do not
+replace it if `/qa-setup` already created it):
 
 ```json
 {
@@ -192,11 +196,11 @@ folder named `ABC`. To give a ticket prefix a friendlier name, create
 }
 ```
 
-**Jira attachments (optional).** To let SentinelQA download the ticket's attachments (DB scripts,
+**Jira attachments (optional).** To let Agentic QA Autopilot download the ticket's attachments (DB scripts,
 specs, screenshots), set two environment variables. On Jira Cloud these are `JIRA_EMAIL` and
 `JIRA_API_TOKEN`; create the token at *id.atlassian.com → Security → API tokens*. On Jira Server or
 Data Center, set `JIRA_PAT` instead. The token is read from the environment only, and never printed
-or saved. Without it, SentinelQA asks you once to drop the files into the case folder's `attachments/`, or
+or saved. Without it, Agentic QA Autopilot asks you once to drop the files into the case folder's `attachments/`, or
 continues and lists them as *Not reviewed* in the report.
 
 **Per-project memory.** The method reads each project's own `CLAUDE.md` and its known-findings
@@ -245,14 +249,14 @@ switched on by the plugin, because it applies to every repo you open. To opt in,
 
 | Symptom | Fix |
 |---|---|
-| `/qa-functional` doesn't appear after installing | Restart Claude Code. Then run `/plugin`: SentinelQA should show as installed and enabled. If it's disabled, enable it there |
+| `/qa-functional` doesn't appear after installing | Restart Claude Code. Then run `/plugin`: Agentic QA Autopilot should show as installed and enabled. If it's disabled, enable it there |
 | `/plugin marketplace add` fails | Check that `git --version` works and that you can open github.com. Then retry |
 | Audit scripts fail with "python not found" | See the Windows note under Prerequisites. `python --version` must work in a new terminal |
 | The agent says "No Jira tool in this session" | Connect **Atlassian Rovo** in Claude's settings, then restart Claude Code. Or paste the ticket text (description **and** comments) |
-| Atlassian Rovo warns about a "deprecated V1 endpoint" (removed 2027-03-01) | In Claude settings → Connectors, remove Atlassian Rovo and add it again from the directory (or ask your admin if your organisation manages it). Nothing in SentinelQA changes |
+| Atlassian Rovo warns about a "deprecated V1 endpoint" (removed 2027-03-01) | In Claude settings → Connectors, remove Atlassian Rovo and add it again from the directory (or ask your admin if your organisation manages it). Nothing in Agentic QA Autopilot changes |
 | "deprecated HTTP+SSE transport … is being phased out" | You're on the older "Atlassian" connector, which Atlassian is retiring. Add **Atlassian Rovo** in Claude's settings → Connectors, then restart |
 | The `qa-functional` agent returned a plan but ran no tests | That is its job. Run `/qa-functional <KEY>` next: it continues from the same case file and runs the live tests |
-| `/qa-functional` can't execute tests | SentinelQA's browser didn't start. Check `node --version` (install Node.js LTS if missing), restart Claude Code, then check `/mcp`. Until then it tests over HTTP where it can |
+| `/qa-functional` can't execute tests | Agentic QA Autopilot's browser didn't start. Check `node --version` (install Node.js LTS if missing), restart Claude Code, then check `/mcp`. Until then it tests over HTTP where it can |
 | `/qa-functional` keeps asking about environments or accounts | Run `/qa-setup` once (or `/qa-init` in that project folder) so they're saved |
 | "`ABC-123` belongs to *Project*, whose code is at …" | You started Claude Code in another folder. Open it in that folder and run the command again, or reply *continue here* to test without the source code |
 | "Where is *Project* on this machine now?" | The saved folder was moved or renamed. Give the new path once; it is saved |
@@ -263,6 +267,7 @@ switched on by the plugin, because it applies to every repo you open. To opt in,
 | Attachments listed as "Not reviewed" | Set the Jira token (*Optional configuration*), or drop the files into the case folder's `attachments/` and say so |
 | `qa/` shows up in `git status` | Create `qa/.gitignore` containing a single `*` line. If the repo must stay untouched, re-run `/qa-setup` and mark the project read-only |
 | A report landed in `QA-Reports/_Unsorted` | The file name had no ticket key. Re-publish with `--project <NAME>` |
+| On Windows, after QA runs, the lock screen says your sign-in "could not be verified" | Seen on one Windows machine so far: a test browser starting with a brand-new profile was counted by Windows as a failed sign-in, and enough of them locked the account until the lockout period set by the organisation had passed. Check the counter in PowerShell: `([ADSI]'WinNT://./<your-windows-user>,user').BadPasswordAttempts`. If it rises during a QA run, stop and open an issue on this repo with the number |
 | Updates don't show up | `/plugin marketplace update sentinelqa`, then restart Claude Code |
 
 ## Changing the process

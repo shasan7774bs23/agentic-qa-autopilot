@@ -1,5 +1,5 @@
 ---
-description: Add or update ONE project (the one in the current folder) in this machine's SentinelQA profile. Shortcut for /qa-setup when you only need one project. Never required.
+description: Add or update ONE project (the one in the current folder) in this machine's Agentic QA Autopilot profile. Shortcut for /qa-setup when you only need one project. Never required.
 ---
 
 Run the `/qa-setup` procedure for **only the project in the current folder**. Keep the machine

@@ -80,6 +80,23 @@ When information is missing: **stop, identify the gap, ask a precise question.**
     "the code has no ownership check" is a different claim from "the button appears for owners" —
     open the page and look.
 
+9e. **EVERY HEADING IS ONE PLAIN, COMPLETE SENTENCE.** A case, item or decision heading is a single
+    meaningful sentence saying **what was tested and what happened**, so a reader who sees only the
+    headings knows the result. Not a bare label ("TC-03 · Coupon SAVE10"), and **not
+    question/answer or arrow form** ("…? → yes …", "X → Y"). Format for cases:
+    `TC-03 · Applying coupon SAVE10 to a $100.00 order reduces the total to $90.00 — PASS`.
+    Results-table "Scenario" cells follow the same rule in short form. Decision-brief item titles
+    are plain statements too. Bug headings keep the bug-title formula.
+    `scripts/report-audit.py` (R9g) fails a case heading that is a label, a question or arrow form.
+9f. **SCREENSHOTS MUST SHOW THE COMPLETE RESULT.** Set the browser viewport to at least 1440 px wide
+    before the first capture (`browser_resize`, e.g. 1440×1000): the browser tool's small default
+    viewport crops everything. Use full-page captures for grids, lists and forms, and capture the
+    WHOLE popup element with its scrolling areas expanded. The image must show every row, the outcome
+    message and enough context to see which record it is. A cropped image that hides rows, the
+    result line or the record itself is not evidence: retake it. Check image dimensions and open
+    the key ones before building the report. Only when a screenshot is genuinely impossible
+    (HTTP-level behaviour, unit-test output), say why **in that case**.
+
 9c. **Every report ends with an EVIDENCE INDEX** — a table of every evidence file, what it shows,
     and which case it belongs to, plus a note of evidence captured as data rather than images.
     Flag any artifact that must **not** be used as evidence (e.g. captured during a broken selector
@@ -185,7 +202,7 @@ without execution evidence · report ambiguous behaviour as a confirmed defect �
 reproduction steps · hide requirement gaps · generate padding or duplicate test cases · test only
 happy paths · assume a requirement is complete · treat severity and priority as the same thing.
 
-### Standing rules (the team lead's machine-wide rules, packed with SentinelQA)
+### Standing rules (the team lead's machine-wide rules, packed with Agentic QA Autopilot)
 - **Close every test browser you open** (`browser_close`) when the run, or a break in it, ends. Never
   close the person's own browser windows.
 - **Never test production. Never print, store or commit a password, token or key**: not in the case
@@ -196,7 +213,7 @@ happy paths · assume a requirement is complete · treat severity and priority a
   sweeps, `sonnet` for normal work, `opus` only for verdicts, root causes and final synthesis. Never
   downgrade a task when that would hurt the result; say so instead. A single agent doing one scoped
   lookup needs no check.
-- **Commits carry the person's own name only.** For any commit SentinelQA makes (test automation
+- **Commits carry the person's own name only.** For any commit Agentic QA Autopilot makes (test automation
   code), do not add an AI `Co-Authored-By` trailer or a "Generated with" footer unless the person asks.
 - **Never write anything into a repository the profile marks read-only**, and never commit or push
   QA case files.
@@ -223,7 +240,7 @@ continue with whatever exists, and record every gap in `00-intake.yml` → `depe
 again about an item that has been answered for this ticket. Read the answers back from
 `00-intake.yml` when you resume.
 
-**First tool call of every run: read this machine's SentinelQA profile.**
+**First tool call of every run: read this machine's Agentic QA Autopilot profile.**
 `python ${CLAUDE_SKILL_DIR}/scripts/sentinelqa-setup.py match --cwd . --ticket <TICKET-KEY>`
 (If `python` is not found, use `python3` (macOS/Linux) or `py -3` (Windows), and keep using it for
 every script in this run.)
@@ -232,7 +249,7 @@ It prints JSON:
   (never test one marked `production`), how to confirm the build, accounts by role, gotchas, and its
   **case root** (`case_root`). Do not ask again for anything it records.
 - `"status": "no_profile"` → this machine was never set up. Send ONE short message first, before
-  reading templates, probing anything or writing any file: *"SentinelQA isn't set up on this machine
+  reading templates, probing anything or writing any file: *"Agentic QA Autopilot isn't set up on this machine
   yet. Run `/qa-setup` now? It takes about 5 minutes, once, and covers all your projects and the
   permission rules. Or I can continue and ask only what this ticket needs."* If they continue, run
   row 9 as part of the batched question.
@@ -275,7 +292,7 @@ trying that role** (no retries, no cycling other accounts: lockouts), and add it
 
 **5 — ONE message** with every remaining item: the `ask` list, failed logins, the ticket text if no
 Jira connector worked, attachments, permission rules (row 9), and the run-context questions
-(Step 0c). Include, for new facts: *"I'll save these to your SentinelQA profile so they are not asked
+(Step 0c). Include, for new facts: *"I'll save these to your Agentic QA Autopilot profile so they are not asked
 again"*. After the reply, save new facts with `import`, re-run `preflight` for anything that was
 fixed, and say: **"All set. Running now; I'll stop only at the sign-off gates."**
 
@@ -306,10 +323,10 @@ check) with `/qa-setup`, so the next ticket does not ask.
 | 3 | **The project's source code** | The working folder is a repo holding the application code for this ticket (the ticket key in `git log`, or the feature's names in the source) | Ask: *"I can't find this project's source code here. Is it available to QA? (path / no)"*. On **"no"**, record `codebase: unavailable — confirmed by <name>, <date>` and continue. Pass 1 becomes **requirement-based predictions** (see *Two-pass verification*). Then Pass 2 tests everything reachable live |
 | 4 | **Test environment** (URL) and a way to confirm the deployed build | Project layer, or the ticket | Without an environment there is no live testing: deliver the analysis, Pass 1 and the complete test design, and mark every case Not Executed with the blocker named |
 | 5 | **Test accounts** by role | Project layer: role → where the credential lives (`env:USER_VAR,PASS_VAR` or `file:<path>#<key>`), checked by `preflight` plus one test login per role | Test what the accounts you have can reach. Every other role-dependent case is Not Executed with the missing role named |
-| 6 | **Browser tool** | SentinelQA installs its own Playwright browser server (`mcp__plugin_sentinelqa_playwright__browser_*`). Any other `browser_navigate` tool (e.g. `mcp__playwright__…`) works too. It needs Node.js: if the server failed to start, `node --version` shows whether Node is missing | Fall back to authenticated HTTP (`curl`) for everything non-visual. Visual cases are Not Executed, with the blocker "no browser tool in this session" (and "install Node.js, then restart Claude Code" when Node is missing) |
+| 6 | **Browser tool** | Agentic QA Autopilot installs its own Playwright browser server (`mcp__plugin_sentinelqa_playwright__browser_*`). Any other `browser_navigate` tool (e.g. `mcp__playwright__…`) works too. It needs Node.js: if the server failed to start, `node --version` shows whether Node is missing | Fall back to authenticated HTTP (`curl`) for everything non-visual. Visual cases are Not Executed, with the blocker "no browser tool in this session" (and "install Node.js, then restart Claude Code" when Node is missing) |
 | 7 | **Python** (audit and report scripts) | `python --version`, then `py -3 --version`, then `python3 --version`. Use the first that works, and use that same command for every script call | Run the audit checks by hand from the script's rules, and state in the report that the scripted audits could not run |
 | 8 | **Project knowledge** (environments, accounts, build check, source code, case root) | The profile (`sentinelqa-setup.py match`), then project memory, `CLAUDE.md` / `CLAUDE.local.md`, earlier case files | Ask only what this ticket needs, in the same batched message. At the end of the run, offer to save it with `/qa-setup`, so the next ticket in this project doesn't ask |
-| 9 | **Permission rules** (once per machine; normally settled by `/qa-setup`) | `python ${CLAUDE_SKILL_DIR}/scripts/sentinelqa-setup.py state show`. If it records `"permission_rules": "added"` or `"declined"`, this row is settled: skip it. Also skip it when the session runs in *auto* permission mode | Ask once, in the same batched message: *"Add SentinelQA's permission rules to your user settings, so QA runs stop asking before each step, in every project? (yes / no)"* On **yes**: run `sentinelqa-setup.py add-rules` (it merges them, keeps every existing entry and a backup, and records the answer). On **no**: run `sentinelqa-setup.py state rules declined`. Either way the question is never asked again on this machine |
+| 9 | **Permission rules** (once per machine; normally settled by `/qa-setup`) | `python ${CLAUDE_SKILL_DIR}/scripts/sentinelqa-setup.py state show`. If it records `"permission_rules": "added"` or `"declined"`, this row is settled: skip it. Also skip it when the session runs in *auto* permission mode | Ask once, in the same batched message: *"Add Agentic QA Autopilot's permission rules to your user settings, so QA runs stop asking before each step, in every project? (yes / no)"* On **yes**: run `sentinelqa-setup.py add-rules` (it merges them, keeps every existing entry and a backup, and records the answer). On **no**: run `sentinelqa-setup.py state rules declined`. Either way the question is never asked again on this machine |
 
 **If everything is available**, say so in one line and run the whole method.
 
@@ -330,7 +347,7 @@ and continue.
 `qa/.gitignore` containing the single line `*`. A folder whose own `.gitignore` says `*` is invisible to
 git, including to `git add -A`, and needs no edit inside `.git/`, so the user gets no permission
 prompt. If a `.playwright-mcp/` folder appears in the project (it comes from a different browser server
-than SentinelQA's), give it the same one-line `.gitignore`. Skip all of this when the project's QA files
+than Agentic QA Autopilot's), give it the same one-line `.gitignore`. Skip all of this when the project's QA files
 are committed, and **never write anything inside a read-only repo**.
 
 **An answer already recorded is not asked again.** If the project layer records that the source
@@ -342,7 +359,7 @@ prompted:**
 - Read files with the Read, Glob and Grep tools, not `cat`, `ls` or `find`.
 - One command per Bash (or PowerShell) call: no `;`, `&&`, pipes or variable assignments in front.
   Never prefix a command with `cd`, and never use `git -C <path>`; you are already in the project.
-- No inline `python -c` one-off scripts. Use SentinelQA's own scripts.
+- No inline `python -c` one-off scripts. Use Agentic QA Autopilot's own scripts.
 - Copy a file with Read then Write, not `cp`. Read page text with `browser_snapshot`, not
   `browser_evaluate`.
 - A revision is the `rev N` in the artifact's header. Never hash files to identify one.
@@ -350,7 +367,7 @@ prompted:**
   `filename` set to `<case folder>/04-evidence/<CASE-ID>.png`: the relative `qa/<TICKET-KEY>/...`
   path for an in-repo case root, the full absolute path when the case root is outside the project.
   Show it inside that case as `![<CASE-ID>](04-evidence/<CASE-ID>.png)`. Never move or copy
-  screenshots afterwards. (SentinelQA's browser keeps its own scratch files in the plugin's data
+  screenshots afterwards. (Agentic QA Autopilot's browser keeps its own scratch files in the plugin's data
   folder, never in the project.)
 - **Never use the browser's `browser_run_code_unsafe`.** Drive the page with normal browser actions
   (navigate, click, type, snapshot, screenshot), and save network evidence with
@@ -972,7 +989,7 @@ human gave you. Bad ones are anything the repo, the ledger or git already record
 the ledger, not memory. Say which candidates you would skip and why, so the human is choosing from a
 filtered list. If the answer is "nothing", write nothing.
 
-**Build the HTML with SentinelQA's builder, never a hand-written one:**
+**Build the HTML with Agentic QA Autopilot's builder, never a hand-written one:**
 `python ${CLAUDE_SKILL_DIR}/scripts/report-html.py qa/<TICKET-KEY>/05-report.md`. It writes
 `<TICKET-KEY>-QA-Report.md` (an exact copy) and `<TICKET-KEY>-QA-Report.html` beside the report,
 embeds every screenshot, and applies every rule below. It exits 1 if any image is missing; fix the

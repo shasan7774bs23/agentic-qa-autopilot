@@ -82,6 +82,20 @@ def main():
         if missing:
             fail("R9b", f"{cid} missing: {', '.join(missing)}")
 
+    # ---- R9g: every case heading is ONE plain sentence: what was tested and what happened ----
+    # Not a bare label ("TC-03 · Coupon SAVE10"), and not question/answer or arrow form either.
+    # Example: "TC-03 · Applying coupon SAVE10 to a $100.00 order reduces the total to $90.00 — PASS".
+    # BUG-n headings follow the bug-title formula instead and are not checked here.
+    for cid, body in cases:
+        if cid.startswith("BUG-"):
+            continue
+        heading = body.split("\n", 1)[0]
+        sentence = re.split(r"\s+—\s+(?:PASS|FAIL|OBSERVED|BLOCKED|NOT EXECUTED)\b", heading)[0]
+        if "?" in sentence or re.search(r"→|->", sentence):
+            fail("R9g", f"{cid} heading is question/arrow form — write one plain sentence of what was tested and what happened")
+        elif len(re.sub(r"[\W_]+", " ", sentence).split()) < 8:
+            fail("R9g", f"{cid} heading is a label, not a sentence saying what was tested and what happened: '{sentence.strip()}'")
+
     # ---- R9b-i: EVERY executed case needs a SCREENSHOT — passes as well as failures ---
     # Added after a past release run shipped several reports that proved their
     # PASSES with JSON and carried almost no images. Rule: a screenshot
@@ -191,7 +205,7 @@ def main():
     # ignore warnings, which is worse than not checking.
     for m in re.finditer(r"^\|.*$", t, re.M):
         row = m.group(0)
-        if re.search(r"\*\*(blocked|pending|not done)\*\*|(BLOCKED|Pending|Not done)", row) and            not re.search(r"(awaiting|human|decision|approval|permission|outage|disconnect|"
+        if re.search(r"\*\*(blocked|pending|not done)\*\*|\b(BLOCKED|Pending|Not done)\b", row) and            not re.search(r"(awaiting|human|decision|approval|permission|outage|disconnect|"
                          r"unavailable|tool|environment|instruction|review|reconnect|not requested)",
                          row, re.I):
             warn("R13", f"status row without a named blocker: {row.strip()[:90]}")
