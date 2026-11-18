@@ -4,6 +4,67 @@
 ticket runs through the same stations and gates, and every claim in a report is backed by
 evidence.
 
+## How it works at a glance
+
+```mermaid
+flowchart LR
+    U(["You"])
+    U -->|"once per machine"| S["/qa-setup"]
+    U -->|"for each ticket"| F["/qa-functional TICKET"]
+    U -->|"when you need automated tests"| A["/qa-automate request"]
+    U -->|"before a release"| R["Is fix-version X ready to ship?"]
+    S --> S1["Checks the machine and saves your projects,<br/>environments and where logins are kept"]
+    F --> F1["Reads the ticket<br/>and the code"] --> F2["Numbered rules<br/>and a test plan"] --> F3["Tests live in a browser,<br/>a screenshot for every case"] --> F4["Audited QA report:<br/>READY or NOT READY"]
+    A --> A1["Studies your<br/>existing framework"] --> A2["Writes and runs real tests<br/>in your own stack"] --> A3["Sorts every failure:<br/>app bug or test problem"] --> A4["Working tests<br/>and a run report"]
+    R --> R1["Rolls up every<br/>ticket's QA report"] --> R2["Release go / no-go"]
+    G{{"You decide at every sign-off gate.<br/>Nothing is filed, committed or pushed without you."}}
+    F2 -.-> G
+    F4 -.-> G
+    A2 -.-> G
+    R2 -.-> G
+```
+
+**Testing one ticket (`/qa-functional`).** Six stations, and five gates where it stops and you decide:
+
+```mermaid
+flowchart TD
+    S0["S0 Intake<br/>ticket, environment, deployed build confirmed"] --> S1["S1 Understand<br/>acceptance criteria become numbered rules"]
+    S1 --> GA{"Gate A<br/>Right rules?"}
+    GA -- "change" --> S1
+    GA -- "approved" --> S2["S2 Design<br/>full test plan, reviewed by a second model"]
+    S2 --> GB{"Gate B<br/>Right coverage?"}
+    GB -- "reject with reasons" --> S2
+    GB -- "approved" --> P1["S3 Pass 1<br/>predict from the code, written down before testing"]
+    P1 --> P2["S3 Pass 2<br/>run live in the browser, screenshot every case"]
+    P2 --> GC{"Gate C<br/>Real defects? How severe?"}
+    GC --> S4["S4 Report<br/>Markdown and HTML, checked by two audits"]
+    S4 --> GD{"Gate D<br/>Sign the verdict? File what?"}
+    GD --> S5["S5 Release<br/>release-gate rolls up the fix-version"]
+    S5 --> GE{"Gate E<br/>Ship?"}
+```
+
+**Building automated tests (`/qa-automate`).** Real tests in your project's own stack, and an honest answer for every failure:
+
+```mermaid
+flowchart TD
+    A0["/qa-automate request"] --> A1["Start-of-run check<br/>project, environment, logins"]
+    A1 --> A2["Inspect the project<br/>stack, framework, existing tests, git rules"]
+    A2 --> A3["Understand the requirement<br/>an approved QA plan, if one exists, is the scope"]
+    A3 --> A4["Happy-path and end-to-end scenarios first"]
+    A4 --> A5{"Negative and<br/>edge cases?"}
+    A5 -- "only if you confirm" --> A6["Reuse what exists, then write tests<br/>locators are read from the real page"]
+    A6 --> A7["Build and run for real"]
+    A7 --> A8{"Result"}
+    A8 -- "pass" --> A12["Run report with evidence"]
+    A8 -- "fail" --> A9{"Why did it fail?"}
+    A9 -- "the test, the data or the environment" --> A10["Repair the test and report the change<br/>the expected behaviour is never changed"]
+    A10 --> A7
+    A9 -- "the app breaks the requirement, reproduced" --> A11["Draft bug report with evidence"]
+    A9 -- "cannot tell yet" --> A13["Inconclusive<br/>names the evidence that would settle it"]
+    A11 --> A12
+    A13 --> A12
+```
+
 ## What you get
 
 | Piece | What it does | How to use it |
